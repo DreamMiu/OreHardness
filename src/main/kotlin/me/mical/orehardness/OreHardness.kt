@@ -52,7 +52,7 @@ object OreHardness : Plugin() {
                         if (item.type.maxDurability.toInt() - damage < durability) {
                             // FIXME: 这样有些简单粗暴, 我更希望的是有原版工具坏掉的动画.
                             item.amount = 0
-                            e.player.sendActionBar("&e你尝试开采 &b$name, 但你的工具报废了也没能挖掉该方块...".colored())
+                            e.player.sendActionBar("&e你尝试开采 &b$name, &e但你的工具报废了也没能挖掉该方块...".colored())
                             e.isCancelled = true
                         } else {
                             damage += durability
