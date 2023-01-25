@@ -1,5 +1,6 @@
 package me.mical.orehardness
 
+import dev.lone.itemsadder.api.CustomStack
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.event.block.BlockBreakEvent
@@ -49,8 +50,10 @@ object OreHardness : Plugin() {
                 val item = e.player.equipment?.itemInMainHand ?: return@mirrorNow
                 val name = ItemStack(e.block.type).getI18nName()
                 var hasEnchantment = false
-                if (item.type.name.contains("PICKAXE")) {
-                    item.modifyMeta<Damageable> {
+                val customStack = CustomStack.byItemStack(item)
+                if (customStack != null) {
+                    if (customStack.id.lowercase().contains("pickaxe")) {
+                        val view = durability
                         if (item.enchantments.containsKey(Enchantment.DURABILITY)) {
                             val level = item.getEnchantmentLevel(Enchantment.DURABILITY)
                             durability = (durability / level)
@@ -58,19 +61,43 @@ object OreHardness : Plugin() {
                                 hasEnchantment = true
                             }
                         }
-                        if (item.type.maxDurability.toInt() - damage < durability) {
+                        if (customStack.durability < durability) {
                             // FIXME: 这样有些简单粗暴, 我更希望的是有原版工具坏掉的动画.
                             item.amount = 0
                             e.player.sendActionBar("&e你尝试开采 &b$name, &e但你的工具报废了也没能挖掉该方块...".colored())
                             e.isCancelled = true
                         } else {
-                            damage += durability
-                            if (durability in (1..3)) {
-                                e.player.sendActionBar("&e你开采的 &b$name &e矿物硬度适中, 消耗了你${durability}格耐久. ${if (hasEnchantment) "&b(耐久减免)" else ""}".colored())
-                            } else if (durability in 4..7) {
-                                e.player.sendActionBar("&e你开采的 &b$name &e矿物稍微有点硬, 消耗了你${durability}格耐久. ${if (hasEnchantment) "&b(耐久减免)" else ""}".colored())
+                            durability -= 1
+                            customStack.durability -= durability
+                            when (view) {
+                                in 1..3 -> e.player.sendActionBar("&e你开采的 &b$name &e矿物硬度适中, 消耗了你${view}格耐久. ${if (hasEnchantment) "&b(耐久减免)" else ""}".colored())
+                                in 4..7 -> e.player.sendActionBar("&e你开采的 &b$name &e矿物稍微有点硬, 消耗了你${view}格耐久. ${if (hasEnchantment) "&b(耐久减免)" else ""}".colored())
+                                else -> e.player.sendActionBar("&e你开采的 &b$name &e矿物硬度过大! 消耗了你${view}格耐久. ${if (hasEnchantment) "&b(耐久减免)" else ""}".colored())
+                            }
+                        }
+                    }
+                } else {
+                    if (item.type.name.contains("PICKAXE")) {
+                        item.modifyMeta<Damageable> {
+                            if (item.enchantments.containsKey(Enchantment.DURABILITY)) {
+                                val level = item.getEnchantmentLevel(Enchantment.DURABILITY)
+                                durability = (durability / level)
+                                if (level > 1) {
+                                    hasEnchantment = true
+                                }
+                            }
+                            if (item.type.maxDurability.toInt() - damage < durability) {
+                                // FIXME: 这样有些简单粗暴, 我更希望的是有原版工具坏掉的动画.
+                                item.amount = 0
+                                e.player.sendActionBar("&e你尝试开采 &b$name, &e但你的工具报废了也没能挖掉该方块...".colored())
+                                e.isCancelled = true
                             } else {
-                                e.player.sendActionBar("&e你开采的 &b$name &e矿物硬度过大! 消耗了你${durability}格耐久. ${if (hasEnchantment) "&b(耐久减免)" else ""}".colored())
+                                damage += durability
+                                when (durability) {
+                                    in 1..3 -> e.player.sendActionBar("&e你开采的 &b$name &e矿物硬度适中, 消耗了你${durability}格耐久. ${if (hasEnchantment) "&b(耐久减免)" else ""}".colored())
+                                    in 4..6 -> e.player.sendActionBar("&e你开采的 &b$name &e矿物稍微有点硬, 消耗了你${durability}格耐久. ${if (hasEnchantment) "&b(耐久减免)" else ""}".colored())
+                                    else -> e.player.sendActionBar("&e你开采的 &b$name &e矿物硬度过大! 消耗了你${durability}格耐久. ${if (hasEnchantment) "&b(耐久减免)" else ""}".colored())
+                                }
                             }
                         }
                     }

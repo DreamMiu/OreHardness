@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("io.izzel.taboolib") version "1.42"
+    id("io.izzel.taboolib") version "1.55"
     id("org.jetbrains.kotlin.jvm") version "1.5.10"
 }
 
@@ -14,17 +14,19 @@ taboolib {
     install("module-nms")
     install("module-nms-util")
     classifier = null
-    version = "6.0.9-66"
+    version = "6.0.10-73"
 }
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
 }
 
 dependencies {
     compileOnly("ink.ptms:nms-all:1.0.0")
     compileOnly("ink.ptms.core:v11902:11902-minimize:mapped")
     compileOnly("ink.ptms.core:v11902:11902-minimize:universal")
+    compileOnly("com.github.LoneDev6:api-itemsadder:3.2.3c")
     compileOnly(kotlin("stdlib"))
     compileOnly(fileTree("libs"))
 }
