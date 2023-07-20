@@ -1,10 +1,12 @@
 package me.mical.orehardness
 
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
+import org.bukkit.inventory.meta.ItemMeta
 import taboolib.common.platform.Plugin
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.command.command
@@ -52,7 +54,8 @@ object OreHardness : Plugin() {
                 val name = ItemStack(e.block.type).getI18nName(e.player)
                 var hasEnchantment = false
                 if (item.type.name.contains("PICKAXE")) {
-                    item.modifyMeta<Damageable> {
+                    item.modifyMeta<ItemMeta> {
+                        this as Damageable
                         if (item.enchantments.containsKey(Enchantment.DURABILITY)) {
                             val level = item.getEnchantmentLevel(Enchantment.DURABILITY)
                             durability = (durability / level)
@@ -62,6 +65,8 @@ object OreHardness : Plugin() {
                         }
                         if (item.type.maxDurability.toInt() - damage < durability) {
                             // FIXME: 这样有些简单粗暴, 我更希望的是有原版工具坏掉的动画.
+                            e.player.playSound(e.player.location, Sound.ENTITY_ITEM_BREAK, 1f, 1f)
+                            NMS.INSTANCE.sendAnimation(e.player)
                             item.amount = 0
                             // damage = item.type.maxDurability.toInt()
                             e.player.sendActionBar(e.player.asLangText("message-broken", name))
