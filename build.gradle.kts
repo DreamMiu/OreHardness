@@ -1,8 +1,8 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("io.izzel.taboolib") version "1.55"
-    id("org.jetbrains.kotlin.jvm") version "1.5.10"
+    id("io.izzel.taboolib") version "1.56"
+    id("org.jetbrains.kotlin.jvm") version "1.5.31"
 }
 
 taboolib {
@@ -10,11 +10,12 @@ taboolib {
     install("common-5")
     install("module-chat")
     install("module-configuration")
+    install("module-lang")
     install("platform-bukkit")
     install("module-nms")
     install("module-nms-util")
     classifier = null
-    version = "6.0.10-73"
+    version = "6.0.11-24"
 }
 
 repositories {
@@ -26,7 +27,6 @@ dependencies {
     compileOnly("ink.ptms:nms-all:1.0.0")
     compileOnly("ink.ptms.core:v11902:11902-minimize:mapped")
     compileOnly("ink.ptms.core:v11902:11902-minimize:universal")
-    compileOnly("com.github.LoneDev6:api-itemsadder:3.2.3c")
     compileOnly(kotlin("stdlib"))
     compileOnly(fileTree("libs"))
 }
