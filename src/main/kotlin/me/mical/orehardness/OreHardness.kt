@@ -64,11 +64,9 @@ object OreHardness : Plugin() {
                             }
                         }
                         if (item.type.maxDurability.toInt() - damage < durability) {
-                            // FIXME: 这样有些简单粗暴, 我更希望的是有原版工具坏掉的动画.
                             e.player.playSound(e.player.location, Sound.ENTITY_ITEM_BREAK, 1f, 1f)
                             NMS.INSTANCE.sendAnimation(e.player)
                             item.amount = 0
-                            // damage = item.type.maxDurability.toInt()
                             e.player.sendActionBar(e.player.asLangText("message-broken", name))
                             e.isCancelled = true
                         } else {
