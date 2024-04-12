@@ -6,11 +6,24 @@ plugins {
 }
 
 taboolib {
-    install("UNIVERSAL")
-    install("BUKKIT_ALL")
-    install("NMS_UTIL, UI")
-    classifier = null
-    version = "6.1.1-beta26"
+    description {
+        contributors {
+            name("坏黑")
+            // ...
+        }
+        dependencies {
+            name("Adyeshach")
+        }
+    }
+    env {
+        // ...
+        install(NMS_UTIL, UI)
+        install(EXPANSION_COMMAND_HELPER, EXPANSION_JAVASCRIPT)
+        install(BUKKIT_ALL)
+    }
+    version {
+        taboolib = "6.1.1-beta26"
+    }
     relocate("ink.ptms.um", "ink.ptms.chemdah.um")
 }
 
