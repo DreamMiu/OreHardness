@@ -1,30 +1,21 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("io.izzel.taboolib") version "2.0.11"
+    id("io.izzel.taboolib") version "1.56"
     id("org.jetbrains.kotlin.jvm") version "1.8.22"
 }
 
 taboolib {
-    description {
-        contributors {
-            name("坏黑")
-            // ...
-        }
-        dependencies {
-            name("Adyeshach")
-        }
-    }
-    env {
-        // ...
-        install(NMS_UTIL, UI)
-        install(EXPANSION_COMMAND_HELPER, EXPANSION_JAVASCRIPT)
-        install(BUKKIT_ALL)
-    }
-    version {
-        taboolib = "6.1.1-beta26"
-    }
-    relocate("ink.ptms.um", "ink.ptms.chemdah.um")
+    install("common")
+    install("common-5")
+    install("module-chat")
+    install("module-configuration")
+    install("module-lang")
+    install("platform-bukkit")
+    install("module-nms")
+    install("module-nms-util")
+    classifier = null
+    version = "6.1.0-pre1"
 }
 
 repositories {
